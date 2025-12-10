@@ -102,10 +102,7 @@ public class UglifierModClient implements ClientModInitializer {
     public static void shiftHue(NativeImage image, RandomGenerator random) {
         var width = image.getWidth();
         var height = image.getHeight();
-        var num = lerp(30f, 300f, random.nextFloat());
-        if (random.nextBoolean())
-            num = -num;
-        float shift = num / 360f; // Convert shift to fraction of full hue rotation
+        float shift = lerp(0.1f, 0.9f, random.nextFloat()); // Convert shift to fraction of full hue rotation
         float[] hsv = new float[3];
 
         for (int x = 0; x < width; x++) {
@@ -116,7 +113,6 @@ public class UglifierModClient implements ClientModInitializer {
 
                 // Shift hue and wrap around if necessary
                 hsv[0] = (hsv[0] + shift) % 1f; // Hue stays within [0, 1] range
-                if (hsv[0] < 0f) hsv[0] += 1f;
 
                 // Apply percentage of a new color.
                 int newPixel = ARGB.linearLerp(HUE_SHIFT_APPLY, oldPixel, Mth.hsvToArgb(hsv[0], hsv[1], hsv[2], ARGB.alpha(oldPixel)));
