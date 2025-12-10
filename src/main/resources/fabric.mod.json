@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "uglifier",
+  "version": "${version}",
+  "name": "Uglifier",
+  "description": "A Minecraft mod that makes every texture look ugly",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/uglifier/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.andeditor.uglifier.client.UglifierModClient"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "uglifier.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": ">=1.21.11 <=1.22"
+  }
+}
