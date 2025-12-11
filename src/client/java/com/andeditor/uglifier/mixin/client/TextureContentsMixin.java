@@ -1,6 +1,6 @@
 package com.andeditor.uglifier.mixin.client;
 
-import com.andeditor.uglifier.client.UglifierModClient;
+import com.andeditor.uglifier.client.UglifierMod;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.renderer.texture.TextureContents;
 import net.minecraft.resources.Identifier;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 abstract class TextureContentsMixin {
     @ModifyReturnValue(method = "load", at = @At("RETURN"))
     private static TextureContents uglifyTexture(TextureContents original, ResourceManager manager, Identifier id) {
-        UglifierModClient.tryUglify(original.image(), id);
+        UglifierMod.tryUglify(original.image(), id);
         return original;
     }
 }

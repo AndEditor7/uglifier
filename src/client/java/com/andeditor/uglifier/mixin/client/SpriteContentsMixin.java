@@ -1,6 +1,6 @@
 package com.andeditor.uglifier.mixin.client;
 
-import com.andeditor.uglifier.client.UglifierModClient;
+import com.andeditor.uglifier.client.UglifierMod;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
@@ -26,6 +26,6 @@ class SpriteContentsMixin {
                             List<MetadataSectionType.WithValue<?>> list,
                             Optional<TextureMetadataSection> textureMetadata,
                             CallbackInfo info) {
-        UglifierModClient.tryUglifySprite(image, id);
+        UglifierMod.tryUglifySprite(image, id);
     }
 }

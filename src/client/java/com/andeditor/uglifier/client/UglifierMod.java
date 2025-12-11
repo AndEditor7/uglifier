@@ -1,6 +1,7 @@
 package com.andeditor.uglifier.client;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import eu.midnightdust.lib.config.MidnightConfig;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.resources.Identifier;
@@ -10,23 +11,17 @@ import net.minecraft.util.Mth;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
-/** Main Uglifier Mod class */
-public class UglifierModClient implements ClientModInitializer {
+import static com.andeditor.uglifier.client.UglifierConfig.*;
 
-    // TODO: Add mod configuration soon
-    public static final boolean ENABLE = true;
-    public static final float SPREAD_SCALE_AMOUNT = 1.5f;
-    public static final float SATURATION_ADDITION = 0.15f;
-    public static final float HUE_SHIFT_APPLY = 0.3f;
-    public static final float NOISE_PERCENTAGE = 0.15f;
-    public static final int NOISE_STRENGTH = 25;
-    public static final int COLOR_REDUCTION = 16;
+/** Main Uglifier Mod class */
+public class UglifierMod implements ClientModInitializer {
+
+    public static final String ID = "uglifier";
 
     @Override
     public void onInitializeClient() {
-        // left it blank in case it need init
+        MidnightConfig.init(ID, UglifierConfig.class);
     }
-
 
     public static boolean shouldUglifySprite(Identifier location) {
         return true; // Just apply all sprite textures
@@ -41,14 +36,14 @@ public class UglifierModClient implements ClientModInitializer {
 
     // Get called from the mixin injection
     public static void tryUglify(NativeImage image, Identifier location) {
-        if (ENABLE && shouldUglify(location)) {
+        if (enable && shouldUglify(location)) {
             uglify(image, location);
         }
     }
 
     // Get called from the mixin injection
     public static void tryUglifySprite(NativeImage image, Identifier location) {
-        if (ENABLE && shouldUglifySprite(location)) {
+        if (enable && shouldUglifySprite(location)) {
             uglify(image, location);
         }
     }
@@ -77,7 +72,7 @@ public class UglifierModClient implements ClientModInitializer {
             }
         };
 
-        int amount = (int) (Math.sqrt(width * height) * SPREAD_SCALE_AMOUNT);
+        int amount = (int) (Math.sqrt(width * height) * spreadAmountScale);
         for (int i = 0; i < amount; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
@@ -109,13 +104,13 @@ public class UglifierModClient implements ClientModInitializer {
             for (int y = 0; y < height; y++) {
                 int oldPixel = image.getPixel(x, y);
                 rgbToHsv(ARGB.red(oldPixel), ARGB.green(oldPixel), ARGB.blue(oldPixel), hsv);
-                hsv[1] = Math.min(hsv[1] + SATURATION_ADDITION, 1.0f); // Make it a bit more saturation
+                hsv[1] = Math.min(hsv[1] + saturationAddition, 1.0f); // Make it a bit more saturation
 
                 // Shift hue and wrap around if necessary
                 hsv[0] = (hsv[0] + shift) % 1f; // Hue stays within [0, 1] range
 
                 // Apply percentage of a new color.
-                int newPixel = ARGB.linearLerp(HUE_SHIFT_APPLY, oldPixel, Mth.hsvToArgb(hsv[0], hsv[1], hsv[2], ARGB.alpha(oldPixel)));
+                int newPixel = ARGB.linearLerp(hueShiftApply, oldPixel, Mth.hsvToArgb(hsv[0], hsv[1], hsv[2], ARGB.alpha(oldPixel)));
 
                 // Apply new pixel value
                 image.setPixel(x, y, newPixel);
@@ -128,16 +123,17 @@ public class UglifierModClient implements ClientModInitializer {
         var width = image.getWidth();
         var height = image.getHeight();
 
+        Int2IntFunction a = p -> Mth.clamp(p + nextInt(random, -noiseStrength, noiseStrength), 0, 255);
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if (random.nextFloat() > NOISE_PERCENTAGE)
+                if (random.nextFloat() > noisePercentage)
                     continue;
 
                 int pixel = image.getPixel(x, y);
                 if (ARGB.alpha(pixel) < 20)
                     continue;
 
-                Int2IntFunction a = p -> Mth.clamp(p + nextInt(random, -NOISE_STRENGTH, NOISE_STRENGTH), 0, 255);
                 int newPixel = ARGB.color(ARGB.alpha(pixel), a.get(ARGB.red(pixel)), a.get(ARGB.green(pixel)), a.get(ARGB.blue(pixel)));
                 image.setPixel(x, y, newPixel);
             }
@@ -149,10 +145,12 @@ public class UglifierModClient implements ClientModInitializer {
         var width = image.getWidth();
         var height = image.getHeight();
 
+        Int2IntFunction a = p -> p / colorReduction * colorReduction;
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int oldPixel = image.getPixel(x, y);
-                int newPixel = ARGB.color(ARGB.alpha(oldPixel), ARGB.red(oldPixel) / COLOR_REDUCTION * COLOR_REDUCTION, ARGB.green(oldPixel) / COLOR_REDUCTION * COLOR_REDUCTION, ARGB.blue(oldPixel) / COLOR_REDUCTION * COLOR_REDUCTION);
+                int newPixel = ARGB.color(ARGB.alpha(oldPixel), a.get(ARGB.red(oldPixel)), a.get(ARGB.green(oldPixel)), a.get(ARGB.blue(oldPixel)));
                 image.setPixel(x, y, newPixel);
             }
         }

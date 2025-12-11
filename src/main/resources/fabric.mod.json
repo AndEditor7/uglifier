@@ -11,7 +11,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.andeditor.uglifier.client.UglifierModClient"
+      "com.andeditor.uglifier.client.UglifierMod"
     ]
   },
   "mixins": [
