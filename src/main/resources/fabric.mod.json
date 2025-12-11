@@ -4,8 +4,11 @@
   "version": "${version}",
   "name": "Uglifier",
   "description": "A Minecraft mod that makes every texture look ugly",
-  "authors": [],
-  "contact": {},
+  "authors": ["AndEditor7"],
+  "contact": {
+    "sources": "https://github.com/AndEditor7/uglifier",
+    "issues": "https://github.com/AndEditor7/uglifier/issues"
+  },
   "license": "MIT",
   "icon": "assets/uglifier/icon.png",
   "environment": "client",
@@ -21,6 +24,7 @@
     }
   ],
   "depends": {
+    "midnightlib": ">=1.9.2",
     "fabricloader": ">=${loader_version}",
     "minecraft": ">=1.21.11 <=1.22"
   }
