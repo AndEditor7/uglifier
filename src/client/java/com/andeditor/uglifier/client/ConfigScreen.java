@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screens.Screen;
 
 public class ConfigScreen extends MidnightConfigScreen {
 
-    private boolean enable;
+    private boolean enable, gui;
     private float spreadAmountScale;
     private float saturationAddition;
     private float hueShiftApply;
@@ -22,6 +22,7 @@ public class ConfigScreen extends MidnightConfigScreen {
     public void init() {
         super.init();
         enable = UglifierConfig.enable;
+        gui = UglifierConfig.gui;
         spreadAmountScale = UglifierConfig.spreadAmountScale;
         saturationAddition = UglifierConfig.saturationAddition;
         hueShiftApply = UglifierConfig.hueShiftApply;
@@ -34,6 +35,7 @@ public class ConfigScreen extends MidnightConfigScreen {
     public void onClose() {
         super.onClose();
         if (enable != UglifierConfig.enable ||
+            gui != UglifierConfig.gui ||
             spreadAmountScale != UglifierConfig.spreadAmountScale ||
             saturationAddition != UglifierConfig.saturationAddition ||
             hueShiftApply != UglifierConfig.hueShiftApply ||

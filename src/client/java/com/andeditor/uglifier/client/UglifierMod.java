@@ -24,13 +24,72 @@ public class UglifierMod implements ClientModInitializer {
     }
 
     public static boolean shouldUglifySprite(Identifier location) {
+        if (!gui) {
+            var path = location.getPath();
+            if (path.startsWith("world_list/")) return false;
+            if (path.startsWith("world_lists/")) return false;
+            if (path.startsWith("widget/")) return false;
+            if (path.startsWith("widgets/")) return false;
+            if (path.startsWith("transferable_list/")) return false;
+            if (path.startsWith("transferable_lists/")) return false;
+            if (path.startsWith("tooltip/")) return false;
+            if (path.startsWith("tooltips/")) return false;
+            if (path.startsWith("toast/")) return false;
+            if (path.startsWith("toasts/")) return false;
+            if (path.startsWith("statistics/")) return false;
+            if (path.startsWith("statistic/")) return false;
+            if (path.startsWith("spectator/")) return false;
+            if (path.startsWith("social_interactions/")) return false;
+            if (path.startsWith("social_interaction/")) return false;
+            if (path.startsWith("server_list/")) return false;
+            if (path.startsWith("server_lists/")) return false;
+            if (path.startsWith("recipe_book/")) return false;
+            if (path.startsWith("recipe_books/")) return false;
+            if (path.startsWith("realm_status/")) return false;
+            if (path.startsWith("popup/")) return false;
+            if (path.startsWith("popups/")) return false;
+            if (path.startsWith("player_list/")) return false;
+            if (path.startsWith("player_lists/")) return false;
+            if (path.startsWith("pending_invite/")) return false;
+            if (path.startsWith("pending_invites/")) return false;
+            if (path.startsWith("notification/")) return false;
+            if (path.startsWith("notifications/")) return false;
+            if (path.startsWith("icon/")) return false;
+            if (path.startsWith("icons/")) return false;
+            if (path.startsWith("hud/")) return false;
+            if (path.startsWith("gamemode_switcher/")) return false;
+            if (path.startsWith("gamemode_switchers/")) return false;
+            if (path.startsWith("dialog/")) return false;
+            if (path.startsWith("dialogs/")) return false;
+            if (path.startsWith("container/")) return false;
+            if (path.startsWith("containers/")) return false;
+            if (path.startsWith("boss_bar/")) return false;
+            if (path.startsWith("boss_bars/")) return false;
+            if (path.startsWith("advancements/")) return false;
+            if (path.startsWith("advancement/")) return false;
+            if (path.startsWith("hanging_signs/")) return false;
+            if (path.startsWith("hanging_sign/")) return false;
+            if (path.startsWith("sprites/")) return false;
+            if (path.startsWith("sprite/")) return false;
+            if (path.startsWith("title/")) return false;
+            if (path.startsWith("titles/")) return false;
+            if (path.startsWith("presets/")) return false;
+            if (path.startsWith("preset/")) return false;
+            if (path.startsWith("realms/")) return false;
+            if (path.startsWith("realm/")) return false;
+            if (path.startsWith("gui/")) return false;
+            if (path.startsWith("guis/")) return false;
+            if (path.startsWith("textures/gui")) return false;
+        }
         return true; // Just apply all sprite textures
     }
 
     public static boolean shouldUglify(Identifier location) {
-        if (location.getPath().startsWith("textures/effect")) return false;
-        if (location.getPath().startsWith("textures/font")) return false;
-        if (location.getPath().startsWith("textures/misc")) return false;
+        var path = location.getPath();
+        if (path.startsWith("textures/effect")) return false;
+        if (path.startsWith("textures/font")) return false;
+        if (path.startsWith("textures/misc")) return false;
+        if (!gui && path.startsWith("textures/gui")) return false;
         return true;
     }
 
