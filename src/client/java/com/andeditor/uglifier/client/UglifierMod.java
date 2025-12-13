@@ -124,6 +124,7 @@ public class UglifierMod implements ClientModInitializer {
         var width = image.getWidth();
         var height = image.getHeight();
 
+        // Copy the image as source
         var imageSrc = new Object() {
             final int[] pixels = image.getPixelsABGR();
             int getPixel(int x, int y) {
@@ -137,6 +138,7 @@ public class UglifierMod implements ClientModInitializer {
             int y = random.nextInt(height);
             int p = imageSrc.getPixel(x, y);
 
+            // Do five attempts to swap the pixel
             for (int j = 0; j < 5; j++) {
                 int xPlot = x + nextInt(random, -2, 2);
                 int yPlot = y + nextInt(random, -2, 2);
