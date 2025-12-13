@@ -244,7 +244,7 @@ public class UglifierMod implements ClientModInitializer {
             hsv[0] = 0;
         } else if (max == rf) {
             hsv[0] = (60 * (gf - bf) / range + 360) % 360;
-        } else if (max == g) {
+        } else if (max == gf) {
             hsv[0] = 60 * (bf - rf) / range + 120;
         } else {
             hsv[0] = 60 * (rf - gf) / range + 240;
