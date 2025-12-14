@@ -11,7 +11,7 @@ public class UglifierConfig extends MidnightConfig {
     @Entry(name = "Uglify GUI")
     public static boolean gui = false;
     @Entry(min = 0, max = 10, name = "Pixel spread amount scale", isSlider = true, precision = 10)
-    public static float spreadAmountScale = 1.6f;
+    public static float spreadAmountScale = 1.5f;
     @Entry(min = 0, max = 1, name = "Saturation addition", isSlider = true)
     public static float saturationAddition = 0.15f;
     @Entry(min = 0, max = 1, name = "Hue shift apply", isSlider = true)

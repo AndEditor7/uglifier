@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.NativeImage;
 import eu.midnightdust.lib.config.MidnightConfig;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
@@ -94,31 +95,43 @@ public class UglifierMod implements ClientModInitializer {
         var width = image.getWidth();
         var height = image.getHeight();
 
-        // Copy the image as source
-        var imageSrc = new Object() {
-            final int[] pixels = image.getPixelsABGR();
-            int getPixel(int x, int y) {
-                return pixels[x + y * width];
+        // List of occupy pixels
+        var pixels = new Object() {
+            final IntOpenHashSet set = new IntOpenHashSet();
+            void occupy(int x, int y) {
+                set.add(x + y * width);
+            }
+            boolean contains(int x, int y) {
+                return set.contains(x + y * width);
             }
         };
 
         int amount = (int) (Math.sqrt(width * height) * spreadAmountScale);
+
         for (int i = 0; i < amount; i++) {
-            int x = random.nextInt(width);
-            int y = random.nextInt(height);
-            int p = imageSrc.getPixel(x, y);
+            // Do ten attempts to pick the pixel
+            for (int j = 0; j < 10; j++) {
+                int x = random.nextInt(width);
+                int y = random.nextInt(height);
+                if (pixels.contains(x, y)) continue;
+                int p = image.getPixel(x, y);
 
-            // Do five attempts to swap the pixel
-            for (int j = 0; j < 5; j++) {
-                int xPlot = x + nextInt(random, -2, 2);
-                int yPlot = y + nextInt(random, -2, 2);
-                if (xPlot < 0 || xPlot >= width) continue;
-                if (yPlot < 0 || yPlot >= height) continue;
-                if (xPlot == x || yPlot == y) continue;
+                // Do ten attempts to swap the pixel
+                for (int l = 0; l < 10; l++) {
+                    int xPlot = x + nextInt(random, -2, 2);
+                    int yPlot = y + nextInt(random, -2, 2);
+                    if (xPlot < 0 || xPlot >= width) continue;
+                    if (yPlot < 0 || yPlot >= height) continue;
+                    if (xPlot == x || yPlot == y) continue;
+                    if (pixels.contains(xPlot, yPlot)) continue;
 
-                int pPlot = imageSrc.getPixel(xPlot, yPlot);
-                image.setPixelABGR(xPlot, yPlot, p);
-                image.setPixelABGR(x, y, pPlot);
+                    int pPlot = image.getPixel(xPlot, yPlot);
+                    image.setPixel(xPlot, yPlot, p);
+                    image.setPixel(x, y, pPlot);
+                    pixels.occupy(x, y);
+                    pixels.occupy(xPlot, yPlot);
+                    break;
+                }
                 break;
             }
         }
