@@ -1,4 +1,4 @@
-package com.andeditor.uglifier.mixin.client;
+package com.andeditor.uglifier.mixin;
 
 import com.andeditor.uglifier.client.UglifierMod;
 import com.mojang.blaze3d.platform.NativeImage;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @Mixin(SpriteContents.class)
 class SpriteContentsMixin {
     @Inject(method = "<init>(Lnet/minecraft/resources/Identifier;Lnet/minecraft/client/resources/metadata/animation/FrameSize;Lcom/mojang/blaze3d/platform/NativeImage;Ljava/util/Optional;Ljava/util/List;Ljava/util/Optional;)V", at = @At("RETURN"))
-    private void initInject(Identifier id,
+    private void uglifySprite(Identifier id,
                             FrameSize size,
                             NativeImage image,
                             Optional<AnimationMetadataSection> animationMetadata,

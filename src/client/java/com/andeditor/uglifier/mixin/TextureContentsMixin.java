@@ -1,4 +1,4 @@
-package com.andeditor.uglifier.mixin.client;
+package com.andeditor.uglifier.mixin;
 
 import com.andeditor.uglifier.client.UglifierMod;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
